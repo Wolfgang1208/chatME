@@ -5,12 +5,11 @@ import { auth, db, storage } from '../firebase'
 import { async } from '@firebase/util'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore"; 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,Link } from 'react-router-dom'
 
 export const Register = () => {
   const [err, setErr] = useState(false);
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -54,7 +53,7 @@ export const Register = () => {
     } catch (err) {
       setErr(true);
     }
-  }
+  };
 
   return (
     <div className='formContainer'>
@@ -71,9 +70,9 @@ export const Register = () => {
             <span>Add an avatar</span>
           </label>
           <button>Sign up</button>
-          {err && <span>Something went wrong..</span>}
+          {err && <span>Something went wrong...</span>}
         </form>
-        <p>You do have an account? Login</p>
+        <p>You do have an account? <Link to="/login">Login</Link>  </p>
       </div>
     </div>
   )
