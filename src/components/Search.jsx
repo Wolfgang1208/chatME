@@ -32,33 +32,25 @@ const Search = () => {
   }
 
   const handleSelect = async () => {
-    // check whether the group(chats(userA&userB) in firestore) exists, if not create
-    const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+    //check whether the group(chats in firestore) exists, if not create
+    const combinedId =
+      currentUser.uid > user.uid
+        ? currentUser.uid + user.uid
+        : user.uid + currentUser.uid;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
+
       if (!res.exists()) {
-        // create a chat in chats collection
+        //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
-        // create user chats
-        // userChats:{
-        //   testuser:{
-        //     combinedId:{
-        //       userInfo:{
-        //         displayname,img,id
-        //       },
-        //       lastMessage:"",
-        //       date:
-        //     }
-        //   }
-        // }
+        //create user chats
         await updateDoc(doc(db, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
-          // using firebase timestamp to omit timezone cal
           [combinedId + ".date"]: serverTimestamp(),
         });
 
@@ -68,22 +60,19 @@ const Search = () => {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
-          // using firebase timestamp to omit timezone cal
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (err) {
+    } catch (err) { }
 
-    }
     setUser(null);
-    setUsername("");
-    // create user chats
+    setUsername("")
   };
 
   return (
     <div className="search">
       <div className='searchFrom'>
-        <input type="text" placeholder='Find a friend' onKeyDown={handleKey} onChange={(e) => setUsername(e.target.value)} value={username}/>
+        <input type="text" placeholder='Find a friend' onKeyDown={handleKey} onChange={(e) => setUsername(e.target.value)} value={username} />
       </div>
       {err && <span>Sorry, couldnt find user {username}...</span>}
       {user && (
